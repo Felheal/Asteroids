@@ -11,8 +11,17 @@ def main():
     
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
+    clock = pygame.time.Clock()
+    dt = 0
+
     while True:
         log_state()
+
+        #Check for user closing game window and exit loop
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                return
+
         for event in pygame.event.get():
             pass
         
@@ -20,10 +29,9 @@ def main():
         screen.fill("black")
         pygame.display.flip()
 
-        #Check for user closing game window and exit loop
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                return
+        
+        #Delta time calculation for 60 FPS
+        dt = clock.tick(60) / 1000
             
 if __name__ == "__main__":
     main()
