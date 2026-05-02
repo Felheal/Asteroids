@@ -4,6 +4,7 @@ from logger import *
 from player import Player
 from asteroid import Asteroid
 from asteroidfield import AsteroidField
+from shot import Shot
 import sys
 
 def main():
@@ -24,11 +25,13 @@ def main():
     updatable = pygame.sprite.Group()
     drawable = pygame.sprite.Group()
     asteroids = pygame.sprite.Group()
+    shots = pygame.sprite.Group()
     
     # Set objects to specific container groups
     Player.containers = (updatable, drawable)
     Asteroid.containers = (asteroids, updatable, drawable)
     AsteroidField.containers = (updatable)
+    Shot.containers = (shots, updatable, drawable)
 
     #Draw Player
     player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
@@ -49,6 +52,14 @@ def main():
         screen.fill("black")
 
         updatable.update(dt)
+
+        # Collision checks
+        for asteroid in asteroids:
+            for shot in shots:
+                if shot.collides_with(asteroid):
+                    log_event("asteroid_shot")
+                    shot.kill()
+                    asteroid.split()
 
         for asteroid in asteroids:
             if asteroid.collides_with(player):
